@@ -80,3 +80,19 @@ button span {
   font-weight: 600;
   color: #047857;
 }
+
+/* รายชื่อคนลงเล่น */
+.name-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+}
+
+.name-list li {
+  background: #f0fdf4;
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-top: 6px;
+  font-size: 14px;
+  color: #065f46;
+}
