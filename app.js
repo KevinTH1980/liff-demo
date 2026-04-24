@@ -74,6 +74,11 @@ function joinDay(day) {
 // อัปเดตตัวเลขหน้าเว็บ
 // ================================
 function updateUI() {
+  // จำนวน
   document.getElementById("tueCount").innerText = data.tue.length;
   document.getElementById("thuCount").innerText = data.thu.length;
+
+  // รายชื่อ
+  renderList("tue");
+  renderList("thu");
 }
