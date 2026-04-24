@@ -33,55 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const lang = detectLanguage();
       loadLang(lang);
 
-      function getNextDate(dayIndex) {
-  const today = new Date();
-  const result = new Date(today);
-  const diff = (dayIndex + 7 - today.getDay()) % 7 || 7;
-  result.setDate(today.getDate() + diff);
-  return result;
-}
-
-function formatThaiDate(date) {
-  const months = [
-    "ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.",
-    "ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."
-  ];
-  return `${date.getDate()} ${months[date.getMonth()]}`;
-}
-
-function updateDayLabels() {
-  const tueDate = getNextDate(2); // Tuesday
-  const thuDate = getNextDate(4); // Thursday
-
-  document.getElementById("tueLabel").innerText =
-    `อังคาร ${formatThaiDate(tueDate)} 09:00–11:00`;
-
-  document.getElementById("thuLabel").innerText =
-    `พฤหัส ${formatThaiDate(thuDate)} 09:00–11:00`;
-}
       updateUI();
-      function updateUI() {
-  updateDayLabels();
-
-  document.getElementById("tueCount").innerText = data.tue.length;
-  document.getElementById("thuCount").innerText = data.thu.length;
-
-  const tueBtn = document.getElementById("tueBtn");
-  const thuBtn = document.getElementById("thuBtn");
-
-  if (joined.tue) {
-    tueBtn.disabled = true;
-    tueBtn.style.opacity = 0.6;
-  }
-
-  if (joined.thu) {
-    thuBtn.disabled = true;
-    thuBtn.style.opacity = 0.6;
-  }
-
-  renderList("tue");
-  renderList("thu");
-}
     })
     .catch(err => console.error("LIFF error", err));
 });
@@ -112,6 +64,36 @@ async function loadLang(lang) {
 }
 
 // ================================
+// คำนวณวันถัดไป + label
+// ================================
+function getNextDate(dayIndex) {
+  const today = new Date();
+  const result = new Date(today);
+  const diff = (dayIndex + 7 - today.getDay()) % 7 || 7;
+  result.setDate(today.getDate() + diff);
+  return result;
+}
+
+function formatThaiDate(date) {
+  const months = [
+    "ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.",
+    "ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."
+  ];
+  return `${date.getDate()} ${months[date.getMonth()]}`;
+}
+
+function updateDayLabels() {
+  const tueDate = getNextDate(2);
+  const thuDate = getNextDate(4);
+
+  document.getElementById("tueLabel").innerText =
+    `อังคาร ${formatThaiDate(tueDate)} 09:00–11:00`;
+
+  document.getElementById("thuLabel").innerText =
+    `พฤหัส ${formatThaiDate(thuDate)} 09:00–11:00`;
+}
+
+// ================================
 // กดลงชื่อ
 // ================================
 function joinDay(day) {
@@ -137,11 +119,13 @@ function joinDay(day) {
 // อัปเดตหน้าเว็บ
 // ================================
 function updateUI() {
+  updateDayLabels();
+
   document.getElementById("tueCount").innerText = data.tue.length;
   document.getElementById("thuCount").innerText = data.thu.length;
 
-  const tueBtn = document.querySelector("button[onclick=\"joinDay('tue')\"]");
-  const thuBtn = document.querySelector("button[onclick=\"joinDay('thu')\"]");
+  const tueBtn = document.getElementById("tueBtn");
+  const thuBtn = document.getElementById("thuBtn");
 
   if (joined.tue && tueBtn) {
     tueBtn.disabled = true;
