@@ -12,17 +12,22 @@
 </head>
 
 <body>
-  <h1 id="title">Loading...</h1>
-  <p id="desc"></p>
+  <h1 id="title"></h1>
+<p id="desc"></p>
 
-  <button id="start">...</button>
+<div class="card">
+  <h2>เลือกวันที่จะเล่น</h2>
 
-  <!-- ปุ่มเปลี่ยนภาษา -->
-  <div>
-    <button onclick="loadLang('th')">TH</button>
-    <button onclick="loadLang('en')">EN</button>
-    <button onclick="loadLang('cn')">中文</button>
-  </div>
+  <button onclick="joinDay('tue')">
+    🏸 อังคาร <span id="tueCount">0</span>/66
+  </button>
+
+  <button onclick="joinDay('thu')">
+    🏸 พฤหัส <span id="thuCount">0</span>/66
+  </button>
+</div>
+
+<p id="status"></p>
 
   <!-- JavaScript ของเรา -->
   <script src="app.js"></script>
