@@ -19,15 +19,21 @@
     <div class="card">
       <h2>เลือกวันที่จะเล่น</h2>
 
-      <button onclick="joinDay('tue')">
-        🏸 อังคาร
-        <span id="tueCount">0</span>/66
-      </button>
+      <!-- ปุ่มอังคาร -->
+<button onclick="joinDay('tue')">
+  🏸 อังคาร
+  <span id="tueCount">0</span>/66
+</button>
 
-      <button onclick="joinDay('thu')">
-        🏸 พฤหัส
-        <span id="thuCount">0</span>/66
-      </button>
+<ul id="tueList" class="name-list"></ul>
+
+      <!-- ปุ่มพฤหัส -->
+<button onclick="joinDay('thu')">
+  🏸 พฤหัส
+  <span id="thuCount">0</span>/66
+</button>
+
+<ul id="thuList" class="name-list"></ul>
     </div>
 
     <p id="status"></p>
