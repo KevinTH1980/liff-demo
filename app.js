@@ -82,3 +82,13 @@ function updateUI() {
   renderList("tue");
   renderList("thu");
 }
+function renderList(day) {
+  const listEl = document.getElementById(day + "List");
+  listEl.innerHTML = "";
+
+  data[day].forEach((u, i) => {
+    const li = document.createElement("li");
+    li.innerText = `${i + 1}. ${u.name}`;
+    listEl.appendChild(li);
+  });
+}
