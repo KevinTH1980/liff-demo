@@ -21,14 +21,15 @@ body {
 /* title */
 h1 {
   text-align: center;
-  font-size: 48px;
-  margin-bottom: 4px;
+  font-size: 32px;   /* เดิม ~24 → เพิ่ม */
+  margin-bottom: 8px;
 }
 
 #desc {
   text-align: center;
   color: #555;
-  margin-bottom: 20px;
+  font-size: 18px;   /* เดิม ~14 */
+  margin-bottom: 24px;
 }
 
 /* card */
