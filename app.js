@@ -1,89 +1,111 @@
 // ================================
-// รอให้หน้าเว็บโหลดก่อน
+// ตัวแปร global
 // ================================
-document.addEventListener("DOMContentLoaded", () => {
-
-  // 🔹 1. เริ่มต้น LIFF
-  liff.init({ liffId: "2009890149-ANrtauwZ" })
-    .then(() => {
-      console.log("LIFF Ready");
-
-      // 🔹 ตรวจภาษา
-      const lang = detectLanguage();
-      loadLang(lang);
-
-      // 🔹 อัปเดตตัวเลขครั้งแรก
-      updateUI();
-    })
-    .catch(err => {
-      console.error("LIFF error", err);
-    });
-
-});
-
-// ================================
-// ตรวจภาษาจาก LINE
-// ================================
-function detectLanguage() {
-  const lang = liff.getLanguage(); // th / en / zh-Hans / zh-Hant
-  if (lang && lang.startsWith("zh")) return "cn";
-  if (lang === "en") return "en";
-  return "th";
-}
-
-// ================================
-// โหลดไฟล์ภาษา
-// ================================
-async function loadLang(lang) {
-  try {
-    const res = await fetch(`lang/${lang}.json`);
-    const data = await res.json();
-
-    document.getElementById("title").innerText = data.title;
-    document.getElementById("desc").innerText = data.desc;
-  } catch (e) {
-    console.error("Load lang error", e);
-  }
-}
-
-// ================================
-// ระบบลงชื่อเล่นแบต
-// ================================
+const LIFF_ID = "2009890149-ANrtauwZ";
 const MAX = 66;
+
+let userProfile = null;
 
 let data = {
   tue: [],
   thu: []
 };
 
-function joinDay(day) {
-  if (!data[day]) return;
+// ================================
+// รอ DOM + init LIFF
+// ================================
+document.addEventListener("DOMContentLoaded", () => {
+  liff.init({ liffId: LIFF_ID })
+    .then(async () => {
+      if (!liff.isLoggedIn()) {
+        liff.login();
+        return;
+      }
 
-  if (data[day].length >= MAX) {
-    document.getElementById("status").innerText = "❌ วันนี้เต็มแล้ว";
+      userProfile = await liff.getProfile();
+      console.log("LINE Profile:", userProfile);
+
+      const lang = detectLanguage();
+      loadLang(lang);
+
+      updateUI();
+    })
+    .catch(err => console.error("LIFF error", err));
+});
+
+// ================================
+// ตรวจภาษา
+// ================================
+function detectLanguage() {
+  const lang = liff.getLanguage();
+  if (lang && lang.startsWith("zh")) return "cn";
+  if (lang === "en") return "en";
+  return "th";
+}
+
+// ================================
+// โหลดภาษา
+// ================================
+async function loadLang(lang) {
+  try {
+    const res = await fetch(`lang/${lang}.json`);
+    const dataLang = await res.json();
+
+    document.getElementById("title").innerText = dataLang.title;
+    document.getElementById("desc").innerText = dataLang.desc;
+  } catch (e) {
+    console.error("Load lang error", e);
+  }
+}
+
+// ================================
+// กดลงชื่อ
+// ================================
+function joinDay(day) {
+  if (!userProfile || !data[day]) return;
+
+  // กันกดซ้ำ
+  const exists = data[day].some(
+    u => u.userId === userProfile.userId
+  );
+
+  if (exists) {
+    document.getElementById("status").innerText =
+      "⚠️ คุณลงชื่อวันนี้แล้ว";
     return;
   }
 
-  data[day].push("คุณ");
+  if (data[day].length >= MAX) {
+    document.getElementById("status").innerText =
+      "❌ วันนี้เต็มแล้ว";
+    return;
+  }
+
+  data[day].push({
+    userId: userProfile.userId,
+    name: userProfile.displayName
+  });
 
   updateUI();
-  document.getElementById("status").innerText = "✅ ลงชื่อเรียบร้อย";
+  document.getElementById("status").innerText =
+    `✅ ลงชื่อ ${userProfile.displayName} เรียบร้อย`;
 }
 
 // ================================
-// อัปเดตตัวเลขหน้าเว็บ
+// อัปเดตหน้าเว็บ
 // ================================
 function updateUI() {
-  // จำนวน
   document.getElementById("tueCount").innerText = data.tue.length;
   document.getElementById("thuCount").innerText = data.thu.length;
 
-  // รายชื่อ
   renderList("tue");
   renderList("thu");
 }
+
 function renderList(day) {
   const listEl = document.getElementById(day + "List");
+  if (!listEl) return;
+
   listEl.innerHTML = "";
 
   data[day].forEach((u, i) => {
