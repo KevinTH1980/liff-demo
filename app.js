@@ -1,4 +1,5 @@
 // 🔹 1. เริ่มต้น LIFF
+console.log("app.js loaded");
 liff.init({ liffId: "2009890149-ANrtauwZ" })
   .then(async () => {
     console.log("LIFF Ready");
