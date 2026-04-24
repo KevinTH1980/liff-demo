@@ -1,21 +1,29 @@
-// 🔹 1. เริ่มต้น LIFF
-console.log("app.js loaded");
-liff.init({ liffId: "2009890149-ANrtauwZ" })
-  .then(async () => {
-    console.log("LIFF Ready");
+// ================================
+// รอให้หน้าเว็บโหลดก่อน
+// ================================
+document.addEventListener("DOMContentLoaded", () => {
 
-    // 🔹 2. ตรวจภาษา
-    const lang = detectLanguage();
-    loadLang(lang);
+  // 🔹 1. เริ่มต้น LIFF
+  liff.init({ liffId: "2009890149-ANrtauwZ" })
+    .then(() => {
+      console.log("LIFF Ready");
 
-    // 🔹 init UI
-    updateUI();
-  })
-  .catch(err => {
-    console.error("LIFF error", err);
-  });
+      // 🔹 ตรวจภาษา
+      const lang = detectLanguage();
+      loadLang(lang);
 
-// 🔹 3. ตรวจภาษาจาก LINE
+      // 🔹 อัปเดตตัวเลขครั้งแรก
+      updateUI();
+    })
+    .catch(err => {
+      console.error("LIFF error", err);
+    });
+
+});
+
+// ================================
+// ตรวจภาษาจาก LINE
+// ================================
 function detectLanguage() {
   const lang = liff.getLanguage(); // th / en / zh-Hans / zh-Hant
   if (lang && lang.startsWith("zh")) return "cn";
@@ -23,7 +31,9 @@ function detectLanguage() {
   return "th";
 }
 
-// 🔹 4. โหลดไฟล์ภาษา
+// ================================
+// โหลดไฟล์ภาษา
+// ================================
 async function loadLang(lang) {
   try {
     const res = await fetch(`lang/${lang}.json`);
@@ -41,7 +51,6 @@ async function loadLang(lang) {
 // ================================
 const MAX = 66;
 
-// mock data (เดี๋ยวเปลี่ยนเป็น database ทีหลัง)
 let data = {
   tue: [],
   thu: []
@@ -55,13 +64,15 @@ function joinDay(day) {
     return;
   }
 
-  const name = "คุณ"; // STEP ถัดไปจะดึงชื่อ LINE จริง
-  data[day].push(name);
+  data[day].push("คุณ");
 
   updateUI();
   document.getElementById("status").innerText = "✅ ลงชื่อเรียบร้อย";
 }
 
+// ================================
+// อัปเดตตัวเลขหน้าเว็บ
+// ================================
 function updateUI() {
   document.getElementById("tueCount").innerText = data.tue.length;
   document.getElementById("thuCount").innerText = data.thu.length;
