@@ -11,6 +11,11 @@ let data = {
   thu: []
 };
 
+let joined = {
+  tue: false,
+  thu: false
+};
+
 // ================================
 // รอ DOM + init LIFF
 // ================================
@@ -62,22 +67,10 @@ async function loadLang(lang) {
 // กดลงชื่อ
 // ================================
 function joinDay(day) {
-  if (!userProfile || !data[day]) return;
-
-  // กันกดซ้ำ
-  const exists = data[day].some(
-    u => u.userId === userProfile.userId
-  );
-
-  if (exists) {
-    document.getElementById("status").innerText =
-      "⚠️ คุณลงชื่อวันนี้แล้ว";
-    return;
-  }
+  if (!data[day] || joined[day]) return;
 
   if (data[day].length >= MAX) {
-    document.getElementById("status").innerText =
-      "❌ วันนี้เต็มแล้ว";
+    document.getElementById("status").innerText = "❌ วันนี้เต็มแล้ว";
     return;
   }
 
@@ -86,9 +79,10 @@ function joinDay(day) {
     name: userProfile.displayName
   });
 
+  joined[day] = true;
+
   updateUI();
-  document.getElementById("status").innerText =
-    `✅ ลงชื่อ ${userProfile.displayName} เรียบร้อย`;
+  document.getElementById("status").innerText = "✅ ลงชื่อเรียบร้อย";
 }
 
 // ================================
@@ -97,6 +91,19 @@ function joinDay(day) {
 function updateUI() {
   document.getElementById("tueCount").innerText = data.tue.length;
   document.getElementById("thuCount").innerText = data.thu.length;
+
+  const tueBtn = document.querySelector("button[onclick=\"joinDay('tue')\"]");
+  const thuBtn = document.querySelector("button[onclick=\"joinDay('thu')\"]");
+
+  if (joined.tue && tueBtn) {
+    tueBtn.disabled = true;
+    tueBtn.style.opacity = 0.6;
+  }
+
+  if (joined.thu && thuBtn) {
+    thuBtn.disabled = true;
+    thuBtn.style.opacity = 0.6;
+  }
 
   renderList("tue");
   renderList("thu");
