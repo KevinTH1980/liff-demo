@@ -1,73 +1,30 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Badminton Hub</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LIFF App</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
 
   <!-- LIFF SDK -->
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f6f7f9;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-    }
-    .card {
-      background: white;
-      margin: 40px auto;
-      padding: 20px;
-      max-width: 360px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    button {
-      background: #06c755;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      width: 100%;
-    }
-  </style>
 </head>
 
 <body>
+  <h1 id="title">Loading...</h1>
+  <p id="desc"></p>
 
-  <div class="card">
-    <h2>🏸 Badminton Hub</h2>
-    <p id="status">กำลังเชื่อมต่อ LINE...</p>
+  <button id="start">...</button>
 
-    <h3 id="name"></h3>
-
-    <button onclick="alert('ต่อไปจะเป็นหน้าลงชื่อเล่น')">
-      ลงชื่อเล่น
-    </button>
+  <!-- ปุ่มเปลี่ยนภาษา -->
+  <div>
+    <button onclick="loadLang('th')">TH</button>
+    <button onclick="loadLang('en')">EN</button>
+    <button onclick="loadLang('cn')">中文</button>
   </div>
 
-  <script>
-    const LIFF_ID = "2009890149-ANrtauwZ";
-
-    async function main() {
-      await liff.init({ liffId: LIFF_ID });
-
-      if (!liff.isLoggedIn()) {
-        liff.login();
-        return;
-      }
-
-      const profile = await liff.getProfile();
-      document.getElementById("status").innerText = "เข้าสู่ระบบแล้ว";
-      document.getElementById("name").innerText = "สวัสดี " + profile.displayName;
-    }
-
-    main();
-  </script>
-
+  <!-- JavaScript ของเรา -->
+  <script src="app.js"></script>
 </body>
 </html>
