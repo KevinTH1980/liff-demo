@@ -9,3 +9,8 @@ button {
   width: 100%;
   margin-top: 10px;
 }
+button span {
+  font-weight: bold;
+  font-size: 18px;
+  color: #1db446; /* สีเขียว LINE */
+}
